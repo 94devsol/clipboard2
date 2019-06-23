@@ -8,20 +8,21 @@ let tray;
 
 app.on('ready', () => {
   	//  Create the browser window. TODO:
-	// mainWindow = new BrowserWindow({width: 800, height: 600})
+	mainWindow = new BrowserWindow({width: 800, height: 600})
 
-	// mainWindow.loadFile('index.html')
+	mainWindow.loadFile('index.html')
 
-	// mainWindow.webContents.openDevTools()
+	// this will not be called on ready. rather will be called on a globalShortcut event (https://electronjs.org/docs/api/global-shortcut#globalshortcutunregisterall)
+	mainWindow.webContents.openDevTools()
 
-	// mainWindow.on('closed', function () {
-	// 	mainWindow = null
-	// })
+	mainWindow.on('closed', function () {
+		mainWindow = null
+	})
 
 	// Create tray app TODO:
 	mainWindow = new BrowserWindow({ show: false })
 	tray = new Tray(iconPath);
-	var contextMenu = Menu.buildFromTemplate([
+	let contextMenu = Menu.buildFromTemplate([
 		{
 			label: "first item",
 			type: 'radio'
@@ -34,7 +35,7 @@ app.on('ready', () => {
 			label: "third",
 			submenu: [
 				{
-					label: "sub1",	
+					label: "sub1",
 				},
 				{
 					label: "sub2",	
