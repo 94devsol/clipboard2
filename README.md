@@ -2,4 +2,36 @@
 
 **A smart way to manage your clipboard**
 
-A solution for clipboard hassels. Lot more to do. Open for suggestions.
+A solution for clipboard hassels.
+
+#### How to run.
+
+- clone the repo.
+- `npm i`
+- `npm start`
+
+#### How it works.
+
+clipboard2 maintains a history of your clipboard. You can access your clipboard history by pressing `Alt` + `Ctrl` + `V` together.
+
+![clipboard2 screenshot](https://github.com/ar-naseef/clipboard2/assets/Screenshot_clipboard2.png)
+
+This will open a popup with a list of your clipboard history. Keep pressing `Alt` + `Ctrl` + `V` together to rotate through the history. When you release the keys, selected text will be back in your clipboard.
+
+**Isn't clipboard2 awesome?**
+
+##### Tech used
+
+- Electron
+- iohooks
+- electron-clipboard-watcher
+
+#### Contribute!
+
+- [ ] Tray icon + tray menu
+- [ ] Remove window from the task bar when key combination pressed
+- [ ] Configurable number of items stored in the history. (currently hardcoded to 5)
+- [ ] Compatible with macOS (app crashes on macOS)
+- [ ] Option to delete an item from the history
+- [ ] Animation while rotating through history
+- [ ] Configurable background color
