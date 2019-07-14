@@ -20,7 +20,7 @@ This will open a popup with a list of your clipboard history. Keep pressing `Alt
 
 **Isn't clipboard2 awesome?**
 
-##### Tech used
+#### Tech used
 
 - Electron
 - iohooks
