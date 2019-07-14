@@ -14,7 +14,7 @@ A solution for clipboard hassels.
 
 clipboard2 maintains a history of your clipboard. You can access your clipboard history by pressing `Alt` + `Ctrl` + `V` together.
 
-![clipboard2 full screenshot](https://github.com/ar-naseef/clipboard2/blob/master/assets/Screenshot_clipboard2_2.png?raw=true)
+![clipboard2 full screenshot](https://github.com/ar-naseef/clipboard2/blob/master/assets/Screenshot_clipboard2_2.jpg?raw=true)
 
 This will open a popup with a list of your clipboard history. Keep pressing `Alt` + `Ctrl` + `V` together to rotate through the history. When you release the keys, selected text will be back in your clipboard.
 
