@@ -1,69 +1,176 @@
-const { app, BrowserWindow, Tray, Menu } = require('electron')
-const path = require('path');
+const {
+	app,
+	BrowserWindow,
+	ipcMain,
+	clipboard
+} = require('electron');
+const randomstring = require("randomstring");
 
-const iconPath = path.join(__dirname, 'icon2.png');
+const ioHook = require('iohook');
+const clipboardWatcher = require('electron-clipboard-watcher');
+const clipboardMaxLength = 5;
+let win
 
-let mainWindow;
-let tray;
+let clipboardHistoryList = [];
 
-app.on('ready', () => {
-  	//  Create the browser window. TODO:
-	mainWindow = new BrowserWindow({width: 800, height: 600})
-
-	mainWindow.loadFile('index.html')
-
-	// this will not be called on ready. rather will be called on a globalShortcut event (https://electronjs.org/docs/api/global-shortcut#globalshortcutunregisterall)
-	mainWindow.webContents.openDevTools()
-
-	mainWindow.on('closed', function () {
-		mainWindow = null
+const clipboardRotate = (arr) => {
+	let currentIndex = arr.findIndex((elem) => {
+			return elem.isCurrent == true
 	})
 
-	// Create tray app TODO:
-	mainWindow = new BrowserWindow({ show: false })
-	tray = new Tray(iconPath);
-	let contextMenu = Menu.buildFromTemplate([
-		{
-			label: "first item",
-			type: 'radio'
-		},
-		{
-			label: "second",
-			type: 'radio'
-		},
-		{
-			label: "third",
-			submenu: [
-				{
-					label: "sub1",
-				},
-				{
-					label: "sub2",	
+	console.log("current index" + currentIndex);
+
+	if (currentIndex === arr.length - 1) {
+			clipboard.writeText(arr[0].value);
+			arr = arr.map(item => {
+					item.isCurrent = false;
+					return item;
+			})
+			arr[0].isCurrent = true
+	} else {
+			clipboard.writeText(arr[currentIndex + 1].value);
+			arr = arr.map(item => {
+					item.isCurrent = false;
+					return item;
+			})
+			arr[currentIndex + 1].isCurrent = true;
+	}
+	return arr;
+
+}
+
+
+
+function createWindow() {
+
+	// ClipboardWatcher  Start
+	clipboardWatcher({
+		// (optional) delay in ms between polls
+		watchDelay: 10,
+		onTextChange: function (text) {
+				console.log("copied....!");
+				console.log(text);
+
+				// clipboardHistoryList = clipboardHistoryList.map(item => {
+				//     item.isCurrent = false;
+				//     return item;
+				// })
+
+				// clipboardHistoryList.unshift({
+				//     value: text,
+				//     isCurrent: true
+				// });
+
+				if (clipboardHistoryList.length > clipboardMaxLength) {
+					clipboardHistoryList.splice(clipboardHistoryList.length - 1, 1);
+
+					clipboardHistoryList.unshift({
+						id: randomstring.generate(7),
+						value: text,
+						isCurrent: true
+					});
+				} else {
+					clipboardHistoryList.unshift({
+						id: randomstring.generate(7),
+						value: text,
+						isCurrent: true
+					});
 				}
-			]
+
+				console.log(clipboardHistoryList);
 		}
-	])
-	tray.setToolTip("clipboard 2");
-	tray.setContextMenu(contextMenu);
 
-})
+	})
+	//ClipboardWatcher  End
 
-// Quit when all windows are closed.
-app.on('window-all-closed', function () {
-	// On OS X it is common for applications and their menu bar
-	// to stay active until the user quits explicitly with Cmd + Q
-	if (process.platform !== 'darwin') {
-		app.quit()
+
+	//Iohook KEYUP START
+	ioHook.on('keyup', event => {
+			if (event.altKey && event.ctrlKey && event.keycode !== 47) {
+					console.log("closing..")
+					if (win) {
+							win.hide();
+					}
+			}
+	});
+	//Iohook KEYUP END     
+
+	//Iohook KEY DOWN START
+	ioHook.on('keydown', event => {
+
+			if (event.altKey && event.ctrlKey && event.keycode === 47) {
+
+					if (clipboardHistoryList === undefined || clipboardHistoryList.length == 0) {
+							console.log("Clipbored Empty")
+							//win.show();
+
+					} else {
+							console.log("Rotating clipboard");
+							clipboardHistoryList = clipboardRotate(clipboardHistoryList);
+
+							setTimeout(() => {
+
+									if (clipboardHistoryList.length > 1) {
+											clipboardHistoryList.splice(0, 1);
+									}
+
+									console.log("array rotated")
+									console.log('opening the window..');
+									if (win) {
+											win.show();
+											ipcMain.once('asynchronous-message', (event, arg) => {
+													// console.log(arg) // prints "ping"
+													console.log(clipboardHistoryList);
+													event.reply('asynchronous-reply', clipboardHistoryList);
+											})
+
+											win.setVisibleOnAllWorkspaces(true);
+											win.loadFile('src/index.html');
+									} else {
+											win = new BrowserWindow({
+													show: true,
+													frame: false,
+													titleBarStyle: 'hidden',
+													backgroundColor: "#fff",
+													height: 230,
+													// maxHeight: 190,
+													// width: 250,
+													// maxWidth: 510,
+													// transparent: true,
+													webPreferences: {
+															nodeIntegration: true,
+															minimumFontSize: 16,
+															defaultFontSize: 18,
+															// defaultMonospaceFontSize: 18
+													}
+											})
+											ipcMain.once('asynchronous-message', (event, arg) => {
+													console.log(arg) // prints "ping"              
+													event.reply('asynchronous-reply', clipboardHistoryList);
+											})
+											win.setVisibleOnAllWorkspaces(true);
+											win.loadFile('src/index.html');
+									}
+							}, 15);
+					}
+			}
+
+	});
+	//Iohook KEY DOWN END
+
+	ioHook.start();
+}
+
+app.on('ready', createWindow)
+
+app.on('window-all-closed', () => {
+	if (win === null) {
+			createWindow()
 	}
 })
 
-app.on('activate', function () {
-	// On OS X it's common to re-create a window in the app when the
-	// dock icon is clicked and there are no other windows open.
-	if (mainWindow === null) {
-		createWindow()
+app.on('active', () => {
+	if (win == null) {
+			createWindow()
 	}
 })
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
