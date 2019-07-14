@@ -44,38 +44,36 @@ function createWindow() {
 		// (optional) delay in ms between polls
 		watchDelay: 10,
 		onTextChange: function (text) {
-				console.log("copied....!");
-				console.log(text);
+			console.log("copied....!");
+			console.log(text);
 
-				// clipboardHistoryList = clipboardHistoryList.map(item => {
-				//     item.isCurrent = false;
-				//     return item;
-				// })
+			// clipboardHistoryList = clipboardHistoryList.map(item => {
+			//     item.isCurrent = false;
+			//     return item;
+			// })
 
-				// clipboardHistoryList.unshift({
-				//     value: text,
-				//     isCurrent: true
-				// });
+			// clipboardHistoryList.unshift({
+			//     value: text,
+			//     isCurrent: true
+			// });
 
-				if (clipboardHistoryList.length > clipboardMaxLength) {
-					clipboardHistoryList.splice(clipboardHistoryList.length - 1, 1);
+			if (clipboardHistoryList.length > clipboardMaxLength) {
+				clipboardHistoryList.splice(clipboardHistoryList.length - 1, 1);
 
-					clipboardHistoryList.unshift({
-						id: randomstring.generate(7),
-						value: text,
-						isCurrent: true
-					});
-				} else {
-					clipboardHistoryList.unshift({
-						id: randomstring.generate(7),
-						value: text,
-						isCurrent: true
-					});
-				}
-
-				console.log(clipboardHistoryList);
+				clipboardHistoryList.unshift({
+					id: randomstring.generate(7),
+					value: text,
+					isCurrent: true
+				});
+			} else {
+				clipboardHistoryList.unshift({
+					id: randomstring.generate(7),
+					value: text,
+					isCurrent: true
+				});
+			}
+			// console.log(clipboardHistoryList);
 		}
-
 	})
 	//ClipboardWatcher  End
 
@@ -83,12 +81,12 @@ function createWindow() {
 	//Iohook KEYUP START
 	
 	ioHook.on('keyup', event => {
-			if (event.altKey && event.ctrlKey && event.keycode !== 47) {
-					console.log("closing..")
-					if (win) {
-							win.hide();
-					}
+		if (event.altKey && event.ctrlKey && event.keycode !== 47) {
+			console.log("closing..")
+			if (win) {
+				win.hide();
 			}
+		}
 	});
 	
 	//Iohook KEYUP END     
@@ -96,64 +94,62 @@ function createWindow() {
 	//Iohook KEY DOWN START
 	ioHook.on('keydown', event => {
 
-			if (event.altKey && event.ctrlKey && event.keycode === 47) {
+		if (event.altKey && event.ctrlKey && event.keycode === 47) {
 
-					if (clipboardHistoryList === undefined || clipboardHistoryList.length == 0) {
-							console.log("Clipbored Empty")
-							//win.show();
+			if (clipboardHistoryList === undefined || clipboardHistoryList.length == 0) {
+				console.log("Clipbored Empty")
+				//win.show();
 
-					} else {
-							console.log("Rotating clipboard");
-							clipboardHistoryList = clipboardRotate(clipboardHistoryList);
+			} else {
+				console.log("Rotating clipboard");
+				clipboardHistoryList = clipboardRotate(clipboardHistoryList);
 
-							setTimeout(() => {
+				setTimeout(() => {
 
-									if (clipboardHistoryList.length > 1) {
-											clipboardHistoryList.splice(0, 1);
-									}
-
-									console.log("array rotated")
-									console.log('opening the window..');
-									if (win) {
-											win.show();
-											ipcMain.once('asynchronous-message', (event, arg) => {
-													// console.log(arg) // prints "ping"
-													console.log(clipboardHistoryList);
-													event.reply('asynchronous-reply', clipboardHistoryList);
-											})
-
-											win.setVisibleOnAllWorkspaces(true);
-											win.loadFile('src/index.html');
-									} else {
-											win = new BrowserWindow({
-													show: true,
-													frame: false,
-													titleBarStyle: 'hidden',
-													backgroundColor: "#fff",
-													height: 220,
-													// maxHeight: 190,
-													// width: 250,
-													// maxWidth: 510,
-													// transparent: true,
-													webPreferences: {
-															nodeIntegration: true,
-															minimumFontSize: 16,
-															defaultFontSize: 18,
-															// defaultMonospaceFontSize: 18
-													}
-											})
-											ipcMain.once('asynchronous-message', (event, arg) => {
-													console.log(arg) // prints "ping"              
-													event.reply('asynchronous-reply', clipboardHistoryList);
-											})
-											// win.webContents.openDevTools()
-											win.setVisibleOnAllWorkspaces(true);
-											win.loadFile('src/index.html');
-									}
-							}, 15);
+					if (clipboardHistoryList.length > 1) {
+						clipboardHistoryList.splice(0, 1);
 					}
-			}
 
+					console.log("array rotated")
+					console.log('opening the window..');
+					if (win) {
+							win.show();
+							ipcMain.once('asynchronous-message', (event, arg) => {
+								// console.log(clipboardHistoryList);
+								event.reply('asynchronous-reply', clipboardHistoryList);
+							})
+
+							win.setVisibleOnAllWorkspaces(true);
+							win.loadFile('src/index.html');
+					} else {
+						win = new BrowserWindow({
+							show: true,
+							frame: false,
+							titleBarStyle: 'hidden',
+							backgroundColor: "#fff",
+							height: 220,
+							// maxHeight: 190,
+							// width: 250,
+							// maxWidth: 510,
+							// transparent: true,
+							webPreferences: {
+								nodeIntegration: true,
+								minimumFontSize: 16,
+								defaultFontSize: 18,
+								// defaultMonospaceFontSize: 18
+							}
+						})
+						ipcMain.once('asynchronous-message', (event, arg) => {
+							console.log(arg) // prints "ping"              
+							event.reply('asynchronous-reply', clipboardHistoryList);
+						})
+						// win.webContents.openDevTools()
+						win.setVisibleOnAllWorkspaces(true);
+						win.loadFile('src/index.html');
+					}
+				}, 15);
+			}
+		}
 	});
 	//Iohook KEY DOWN END
 
@@ -164,12 +160,12 @@ app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
 	if (win === null) {
-			createWindow()
+		createWindow()
 	}
 })
 
 app.on('active', () => {
 	if (win == null) {
-			createWindow()
+		createWindow()
 	}
 })
