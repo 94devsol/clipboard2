@@ -5,7 +5,6 @@ const {
 	clipboard
 } = require('electron');
 const randomstring = require("randomstring");
-
 const ioHook = require('iohook');
 const clipboardWatcher = require('electron-clipboard-watcher');
 const clipboardMaxLength = 5;
@@ -15,28 +14,25 @@ let clipboardHistoryList = [];
 
 const clipboardRotate = (arr) => {
 	let currentIndex = arr.findIndex((elem) => {
-			return elem.isCurrent == true
+		return elem.isCurrent == true
 	})
-
 	console.log("current index" + currentIndex);
-
 	if (currentIndex === arr.length - 1) {
-			clipboard.writeText(arr[0].value);
-			arr = arr.map(item => {
-					item.isCurrent = false;
-					return item;
-			})
-			arr[0].isCurrent = true
+		clipboard.writeText(arr[0].value);
+		arr = arr.map(item => {
+			item.isCurrent = false;
+			return item;
+		})
+		arr[0].isCurrent = true
 	} else {
-			clipboard.writeText(arr[currentIndex + 1].value);
-			arr = arr.map(item => {
-					item.isCurrent = false;
-					return item;
-			})
-			arr[currentIndex + 1].isCurrent = true;
+		clipboard.writeText(arr[currentIndex + 1].value);
+		arr = arr.map(item => {
+			item.isCurrent = false;
+			return item;
+		})
+		arr[currentIndex + 1].isCurrent = true;
 	}
 	return arr;
-
 }
 
 
@@ -85,6 +81,7 @@ function createWindow() {
 
 
 	//Iohook KEYUP START
+	
 	ioHook.on('keyup', event => {
 			if (event.altKey && event.ctrlKey && event.keycode !== 47) {
 					console.log("closing..")
@@ -93,6 +90,7 @@ function createWindow() {
 					}
 			}
 	});
+	
 	//Iohook KEYUP END     
 
 	//Iohook KEY DOWN START
@@ -132,7 +130,7 @@ function createWindow() {
 													frame: false,
 													titleBarStyle: 'hidden',
 													backgroundColor: "#fff",
-													height: 230,
+													height: 220,
 													// maxHeight: 190,
 													// width: 250,
 													// maxWidth: 510,
@@ -148,6 +146,7 @@ function createWindow() {
 													console.log(arg) // prints "ping"              
 													event.reply('asynchronous-reply', clipboardHistoryList);
 											})
+											// win.webContents.openDevTools()
 											win.setVisibleOnAllWorkspaces(true);
 											win.loadFile('src/index.html');
 									}

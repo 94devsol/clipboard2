@@ -20,6 +20,7 @@
       padding-left: 8px;
       line-height: 35px;
       margin: 3px;
+      border-radius: 3px;
     }
 
     ul {
@@ -31,22 +32,12 @@
 
     .current {
       /* transition: transform .5s ease; */
-      /* transform: scale(1.1);
-      transition: all .5s ease-in-out; */
-      animation: crescendo .2s alternate infinite ease-in;
+      /* transform: scale(1.1); */
+      transition: all .5s ease-in-out;
       font-weight: 600;
       font-size: 18px;
       background-color: rgba(128, 128, 128, 0.815);
-    }
-
-    @keyframes crescendo {
-      0% {
-        transform: scale(1);
-      }
-
-      100% {
-        transform: scale(1.1);
-      }
+      transform: scale(1.05)
     }
   </style>
 
@@ -55,11 +46,9 @@
 
 <body>
 
-  <ul id="clipboard">
+  <ul id="clipboard"></ul>
 
-  </ul>
   <script>
-    // console.log(test)
     require('./renderer.js')
   </script>
 </body>
