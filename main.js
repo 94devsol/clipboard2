@@ -2,7 +2,9 @@ const {
 	app,
 	BrowserWindow,
 	ipcMain,
-	clipboard
+	clipboard,
+	Menu,
+	Tray
 } = require('electron');
 const randomstring = require("randomstring");
 const ioHook = require('iohook');
@@ -12,6 +14,7 @@ let win
 
 let clipboardHistoryList = [];
 
+//clipboardRotate START
 const clipboardRotate = (arr) => {
 	let currentIndex = arr.findIndex((elem) => {
 		return elem.isCurrent == true
@@ -34,16 +37,39 @@ const clipboardRotate = (arr) => {
 	}
 	return arr;
 }
-
+//clipboardRotate END
 
 
 function createWindow() {
+
+
+
+	win = new BrowserWindow({
+		show: false,
+		frame: false,
+		titleBarStyle: 'hidden',
+		backgroundColor: "#fff",
+		height: 220,
+		skipTaskbar: true,
+		// maxHeight: 190,
+		// width: 250,
+		// maxWidth: 510,
+		// transparent: true,
+		webPreferences: {
+			nodeIntegration: true,
+			minimumFontSize: 16,
+			defaultFontSize: 18,
+			// defaultMonospaceFontSize: 18
+		}
+	})
+
 
 	// ClipboardWatcher  Start
 	clipboardWatcher({
 		// (optional) delay in ms between polls
 		watchDelay: 10,
 		onTextChange: function (text) {
+
 			console.log("copied....!");
 			console.log(text);
 
@@ -79,7 +105,7 @@ function createWindow() {
 
 
 	//Iohook KEYUP START
-	
+
 	ioHook.on('keyup', event => {
 		if (event.altKey && event.ctrlKey && event.keycode !== 47) {
 			console.log("closing..")
@@ -88,7 +114,7 @@ function createWindow() {
 			}
 		}
 	});
-	
+
 	//Iohook KEYUP END     
 
 	//Iohook KEY DOWN START
@@ -96,9 +122,14 @@ function createWindow() {
 
 		if (event.altKey && event.ctrlKey && event.keycode === 47) {
 
-			if (clipboardHistoryList === undefined || clipboardHistoryList.length == 0) {
+			if (clipboardHistoryList === undefined || clipboardHistoryList.length === 0) {
 				console.log("Clipbored Empty")
-				//win.show();
+
+				win.show()
+				// ipcMain.once('asynchronous-message', (event, arg) => {
+				// 	console.log(arg);
+				// 	event.reply('asynchronous-reply', 'empty');
+				// })
 
 			} else {
 				console.log("Rotating clipboard");
@@ -113,37 +144,24 @@ function createWindow() {
 					console.log("array rotated")
 					console.log('opening the window..');
 					if (win) {
-							win.show();
-							ipcMain.once('asynchronous-message', (event, arg) => {
-								// console.log(clipboardHistoryList);
-								event.reply('asynchronous-reply', clipboardHistoryList);
-							})
-
-							win.setVisibleOnAllWorkspaces(true);
-							win.loadFile('src/index.html');
-					} else {
-						win = new BrowserWindow({
-							show: true,
-							frame: false,
-							titleBarStyle: 'hidden',
-							backgroundColor: "#fff",
-							height: 220,
-							// maxHeight: 190,
-							// width: 250,
-							// maxWidth: 510,
-							// transparent: true,
-							webPreferences: {
-								nodeIntegration: true,
-								minimumFontSize: 16,
-								defaultFontSize: 18,
-								// defaultMonospaceFontSize: 18
-							}
-						})
+						win.show();
 						ipcMain.once('asynchronous-message', (event, arg) => {
-							console.log(arg) // prints "ping"              
+							console.log(arg);
 							event.reply('asynchronous-reply', clipboardHistoryList);
 						})
-						// win.webContents.openDevTools()
+
+						// win.webContents.openDevTools();
+						win.setVisibleOnAllWorkspaces(true);
+						win.loadFile('src/index.html');
+					} else {
+						win.show()
+
+						ipcMain.once('asynchronous-message', (event, arg) => {
+							console.log(arg)
+							event.reply('asynchronous-reply', clipboardHistoryList);
+						})
+
+						// win.webContents.openDevTools();
 						win.setVisibleOnAllWorkspaces(true);
 						win.loadFile('src/index.html');
 					}
@@ -156,7 +174,31 @@ function createWindow() {
 	ioHook.start();
 }
 
-app.on('ready', createWindow)
+let tray = null
+app.on('ready', () => {
+	tray = new Tray('./icon.png')
+	const contextMenu = Menu.buildFromTemplate([{
+			label: 'Quit',
+			click: function () {
+				application.isQuiting = true;
+				application.quit();
+			}
+		},
+		{
+			label: 'Configure',
+			click: function () {
+
+			}
+		}
+
+	])
+	tray.setToolTip('This is my application.')
+	tray.setContextMenu(contextMenu);
+	createWindow();
+})
+
+
+// app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
 	if (win === null) {
