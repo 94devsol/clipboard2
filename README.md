@@ -28,11 +28,12 @@ This will open a popup with a list of your clipboard history. Keep pressing `Alt
 
 #### Contribute!
 
-- [ ] Tray icon + tray menu
+- [x] Tray icon + tray menu
+- [ ] Testing in windows and MAC
 - [ ] Remove window from the task bar when key combination pressed
 - [ ] Configurable number of items stored in the history. (currently hardcoded to 5)
 - [ ] Compatible with macOS (app crashes on macOS)
 - [ ] Option to delete an item from the history
 - [ ] Animation while rotating through history
 - [ ] Configurable background color
-- [ ] Clipboard empty message
+- [x] Clipboard empty message
