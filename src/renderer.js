@@ -9,9 +9,6 @@ ipcRenderer.on('asynchronous-reply', (event, arg) => {
 	console.log(arg)
 	var clipboard = document.getElementById("clipboard");
 
-	// var ul = document.createElement("ul");
-	// var li = document.createElement("li");
-	// clipboard.appendChild(li)
 	debugger;
 	if (arg === 'empty') {
 		// var clipboard = document.getElementById("clipboard");
@@ -36,9 +33,21 @@ ipcRenderer.on('asynchronous-reply', (event, arg) => {
 			} else {
 				// clipboard.innerText += `<li id="${item.id}">${item.value}</li>`;
 				var node = document.createTextNode(`${item.value.trim()}`);
+				var btn = document.createElement('button');
+				btn.className = 'icons';
+				var text = document.createTextNode('delete');
+				btn.onclick = () =>{
+					 
+				ipcRenderer.send('delete-message', item.id)
+
+					};
+				btn.appendChild(text);
+				li.append(btn);
+
 			}
-			li.appendChild(node);
-			clipboard.appendChild(li);
+
+				li.appendChild(node);
+				clipboard.appendChild(li);
 		});
 	}
 });

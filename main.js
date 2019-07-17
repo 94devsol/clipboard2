@@ -14,6 +14,7 @@ let win
 
 let clipboardHistoryList = [];
 
+
 //clipboardRotate START
 const clipboardRotate = (arr) => {
 	let currentIndex = arr.findIndex((elem) => {
@@ -62,6 +63,22 @@ function createWindow() {
 			// defaultMonospaceFontSize: 18
 		}
 	})
+
+
+
+	//Delete clipboard history Start
+	ipcMain.on('delete-message', (event, arg) => {
+
+		console.log(" ID :: " + arg)
+		var del = clipboardHistoryList.indexOf(arg);
+		clipboardHistoryList.splice(del, 1)
+      
+		// clipboardRotate(clipboardHistoryList)
+		
+		//  event.reply('asynchronous-reply', clipboardHistoryList);
+	})
+	//Delete clipboard history End
+
 
 
 	// ClipboardWatcher  Start
@@ -135,6 +152,7 @@ function createWindow() {
 				console.log("Rotating clipboard");
 				clipboardHistoryList = clipboardRotate(clipboardHistoryList);
 
+
 				setTimeout(() => {
 
 					if (clipboardHistoryList.length > 1) {
@@ -147,8 +165,11 @@ function createWindow() {
 						win.show();
 						ipcMain.once('asynchronous-message', (event, arg) => {
 							console.log(arg);
+
 							event.reply('asynchronous-reply', clipboardHistoryList);
 						})
+
+
 
 						// win.webContents.openDevTools();
 						win.setVisibleOnAllWorkspaces(true);
@@ -158,8 +179,10 @@ function createWindow() {
 
 						ipcMain.once('asynchronous-message', (event, arg) => {
 							console.log(arg)
+
 							event.reply('asynchronous-reply', clipboardHistoryList);
 						})
+
 
 						// win.webContents.openDevTools();
 						win.setVisibleOnAllWorkspaces(true);
