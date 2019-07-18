@@ -1,8 +1,17 @@
 const {
 	ipcRenderer
 } = require('electron');
+const tt = require('electron-tooltip')
 
 console.log("from renderer");
+tt({
+	position: 'bottom',
+	width: 200,
+	style: {
+	  backgroundColor: '#f2f3f4',
+	  borderRadius: '4px'
+	}
+  })
 
 ipcRenderer.on('asynchronous-reply', (event, arg) => {
 
@@ -21,6 +30,7 @@ ipcRenderer.on('asynchronous-reply', (event, arg) => {
 		console.log("rendering for first time..")
 		arg.forEach((item, i) => {
 			var li = document.createElement("li");
+			li.setAttribute("title", item.value);
 			if (item.value.length > 50) {
 				var res = item.value.substring(0, 50);
 				arg[i].value = res + " ....";
@@ -33,20 +43,19 @@ ipcRenderer.on('asynchronous-reply', (event, arg) => {
 			} else {
 				// clipboard.innerText += `<li id="${item.id}">${item.value}</li>`;
 				var node = document.createTextNode(`${item.value.trim()}`);
-				var btn = document.createElement('button');
-				btn.className = 'icons';
-				var text = document.createTextNode('delete');
-				btn.onclick = () =>{
+				// var btn = document.createElement('button');
+				// btn.className = 'icons';
+				// var text = document.createTextNode('delete');
+				// btn.onclick = () =>{
 					 
-				ipcRenderer.send('delete-message', item.id)
+				// ipcRenderer.send('delete-message', item.id)
 
-					};
-				btn.appendChild(text);
-				li.append(btn);
+				// 	};
+				// btn.appendChild(text);
+				// li.append(btn);
 
 			}
-
-				li.appendChild(node);
+                li.append(node)
 				clipboard.appendChild(li);
 		});
 	}

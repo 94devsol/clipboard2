@@ -43,8 +43,6 @@ const clipboardRotate = (arr) => {
 
 function createWindow() {
 
-
-
 	win = new BrowserWindow({
 		show: false,
 		frame: false,
@@ -52,6 +50,7 @@ function createWindow() {
 		backgroundColor: "#fff",
 		height: 220,
 		skipTaskbar: true,
+		resizable:false,
 		// maxHeight: 190,
 		// width: 250,
 		// maxWidth: 510,
@@ -67,16 +66,16 @@ function createWindow() {
 
 
 	//Delete clipboard history Start
-	ipcMain.on('delete-message', (event, arg) => {
+	// ipcMain.on('delete-message', (event, arg) => {
 
-		console.log(" ID :: " + arg)
-		var del = clipboardHistoryList.indexOf(arg);
-		clipboardHistoryList.splice(del, 1)
+	// 	console.log(" ID :: " + arg)
+	// 	var del = clipboardHistoryList.indexOf(arg);
+	// 	clipboardHistoryList.splice(del, 1)
       
-		// clipboardRotate(clipboardHistoryList)
+	// 	// clipboardRotate(clipboardHistoryList)
 		
-		//  event.reply('asynchronous-reply', clipboardHistoryList);
-	})
+	// 	//  event.reply('asynchronous-reply', clipboardHistoryList);
+	// })
 	//Delete clipboard history End
 
 
