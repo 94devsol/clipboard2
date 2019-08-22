@@ -4,7 +4,8 @@
   "description": "A smart way to manage your clipboard",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-packager . clipboard2"
   },
   "keywords": [
     "Electron",
@@ -16,7 +17,8 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^5.0.6"
+    "electron": "^5.0.6",
+    "electron-packager": "^14.0.4"
   },
   "dependencies": {
     "electron-clipboard-watcher": "^1.0.1",

@@ -1,24 +1,24 @@
 const {
 	ipcRenderer
 } = require('electron');
-const tt = require('electron-tooltip')
+// const tt = require('electron-tooltip')
 
 console.log("from renderer");
-tt({
-	position: 'bottom',
-	width: 200,
-	style: {
-	  backgroundColor: '#f2f3f4',
-	  borderRadius: '4px'
-	}
-  })
+// tt({
+// 	position: 'bottom',
+// 	width: 200,
+// 	style: {
+// 	  backgroundColor: '#f2f3f4',
+// 	  borderRadius: '4px'
+// 	}
+// })
 
 ipcRenderer.on('asynchronous-reply', (event, arg) => {
 
 	console.log(arg)
 	var clipboard = document.getElementById("clipboard");
 
-	debugger;
+	// debugger;
 	if (arg === 'empty') {
 		// var clipboard = document.getElementById("clipboard");
 		// console.log("clipboard empty")

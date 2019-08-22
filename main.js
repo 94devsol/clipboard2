@@ -11,6 +11,7 @@ const ioHook = require('iohook');
 const clipboardWatcher = require('electron-clipboard-watcher');
 const clipboardMaxLength = 5;
 let win
+let tray = null
 
 let clipboardHistoryList = [];
 
@@ -41,20 +42,20 @@ const clipboardRotate = (arr) => {
 //clipboardRotate END
 
 
-function createWindow() {
+createWindow = () => {
 
 	win = new BrowserWindow({
 		show: false,
 		frame: false,
-		titleBarStyle: 'hidden',
-		backgroundColor: "#fff",
+		// titleBarStyle: 'hidden',
+		// backgroundColor: "#fff",
 		height: 220,
-		skipTaskbar: true,
-		resizable:false,
+		// skipTaskbar: true,
+		// resizable: false,
 		// maxHeight: 190,
 		// width: 250,
 		// maxWidth: 510,
-		// transparent: true,
+		transparent: true,
 		webPreferences: {
 			nodeIntegration: true,
 			minimumFontSize: 16,
@@ -62,6 +63,17 @@ function createWindow() {
 			// defaultMonospaceFontSize: 18
 		}
 	})
+
+	// win = new BrowserWindow({
+	// 	show: false,
+	// 	frame: false,
+	// 	height: 250,
+	// 	width: 250,
+	// 	movable: false,
+	// 	center: true,
+	// 	kiosk: true,
+	// 	transparent: true,
+	// })
 
 
 
@@ -196,31 +208,23 @@ function createWindow() {
 	ioHook.start();
 }
 
-let tray = null
 app.on('ready', () => {
-	tray = new Tray('./icon.png')
-	const contextMenu = Menu.buildFromTemplate([{
-			label: 'Quit',
-			click: function () {
-				application.isQuiting = true;
-				application.quit();
-			}
-		},
-		{
-			label: 'Configure',
-			click: function () {
-
-			}
-		}
-
-	])
-	tray.setToolTip('This is my application.')
-	tray.setContextMenu(contextMenu);
 	createWindow();
+
+	tray = new Tray('icon.png');
+	const contextMenu = Menu.buildFromTemplate([
+    { label: 'Quit', click: () => { 
+			console.log("quiting..");
+			app.quit();
+		}},
+	]);
+	
+	// tray.setToolTip('clipboard2')
+	tray.setContextMenu(contextMenu);
+
 })
 
 
-// app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
 	if (win === null) {
