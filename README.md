@@ -38,4 +38,4 @@ This will open a popup with a list of your clipboard history. Keep pressing `Alt
 - [ ] Configurable background color
 - [x] Clipboard empty message
 
-by ![94dev](https://94dev.xyz)
+by [94dev](https://94dev.xyz)
