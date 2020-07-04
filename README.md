@@ -37,3 +37,5 @@ This will open a popup with a list of your clipboard history. Keep pressing `Alt
 - [ ] Animation while rotating through history
 - [ ] Configurable background color
 - [x] Clipboard empty message
+
+by [94dev](https://94dev.xyz)
