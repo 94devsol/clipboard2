@@ -2,7 +2,7 @@
 
 **A smart way to manage your clipboard**
 
-A solution for clipboard hassels.
+A solution for clipboard hassles.
 
 #### How to run.
 
