@@ -1,63 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <style>
+      @font-face {
+        font-family: "poppins";
+        src: url("../poppins.extralight.ttf") format("truetype");
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        /* background: "#ffff"; */
+        color: rgba(255, 255, 255, 1);
+        box-sizing: border-box;
+        font-family: "poppins";
+        /* font-size: large; */
+      }
+      .history__wrapper {
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        width: 100%;
+        /* background-color: rgb(198, 18, 19); */
 
-<head>
+      }
+      .history {
+        display: flex;
+        align-items: center;
+        height: 14vh;
+        color: rgba(255, 255, 255, 1);
+        
+        font-size: medium;
+        font-weight: 200;
+     
+        /* background-color: rgb(18, 18, 129); */
 
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      padding-right: 38px;
-      background: #fff;
-      /* opacity: 0.3; */
-      border-radius: 3px;
-    }
+      }
+      .time {
+        font-size:small;
+        flex-basis: 15%;
+        color: rgba(130, 130, 130, 1);
+        /* background-color: rgb(18, 185, 129); */
+      }
 
-    li {
-      pointer-events: auto;
-      width: 100%;
-      background-color: rgba(209, 209, 209, 0.537);
-      padding-left: 8px;
-      line-height: 35px;
-      margin: 3px;
-      border-radius: 3px;
-      /* opacity: 0.5; */
-    }
+      .current {
+        transition: all 0.5s ease-in-out;
+        /* font-weight: 600;
+        font-size: 18px; */
+        background-color: rgba(68, 68, 68, 1);
+        /* transform: scale(1.05); */
+        /* color: white; */
+      }
 
-    ul {
-      margin-right: 10px;
-      list-style-type: none;
-      font-size: 16px;
-      text-align: center;
-    }
+      .icons {
+        float: right;
+        color: red;
+      }
+      .wrapper {
+        background-color: "#5AABC9";
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* text-align: center; */
+        background-color: rgba(85, 90, 93, 1);
+        height: 15vh;
+      }
+      .footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(85, 90, 93, 1);
 
-    .current {
-      transition: all .5s ease-in-out;
-      font-weight: 600;
-      font-size: 18px;
-      background-color: rgba(128, 128, 128, 0.815);
-      transform: scale(1.05);
-      /* color: white; */
-    }
+        height: 15vh;
+        text-align: center;
+      }
+      .contet {
+        height: 70vh;
+        background-color: rgba(31, 31, 31, 1);
+      }
+      .container {
+        display: "flex";
+        justify-content: "space-between";
+        /* flex-direction: 'column'; */
+        height: 100vh;
+        /* background-color: rgb(158, 28, 147); */
+      }
+    </style>
 
-    .icons {
-      float: right;
-      color: red;
-    }
-  </style>
+    <meta charset="UTF-8" />
+  </head>
 
-  <meta charset="UTF-8">
-</head>
+  <body>
+    <!-- <div class="wrapper"> -->
+    <!-- <ul id="clipboard" class="wrapper"></ul> -->
+    <!-- </div> -->
+    <div class="container">
+      <div class="header">Clipboard 2</div>
+      <div class="contet" id="clipboard"></div>
+      <div class="footer">
+        Press “Ctrl + Alt + V” to select and leave them to copy the text
+      </div>
+    </div>
 
-<body>
-
-  <ul id="clipboard"></ul>
-
-  <script>
-    require('./renderer.js')
-  </script>
-</body>
-
+    <script>
+      require("./renderer.js");
+    </script>
+  </body>
 </html>
