@@ -146,13 +146,13 @@ createWindow = () => {
         clipboardHistoryList === undefined ||
         clipboardHistoryList.length === 0
       ) {
-        console.log("Clipbored Empty");
+        console.log("Clipbored Empty======:::::");
 
         win.show();
-        // ipcMain.once('asynchronous-message', (event, arg) => {
-        // 	console.log(arg);
-        // 	event.reply('asynchronous-reply', 'empty');
-        // })
+        ipcMain.once('asynchronous-message', (event, arg) => {
+        	console.log("===.>",arg);
+        	event.reply('asynchronous-reply', 'empty');
+        })
       } else {
         console.log("Rotating clipboard");
         clipboardHistoryList = clipboardRotate(clipboardHistoryList);

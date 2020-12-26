@@ -39,11 +39,11 @@ register("my-locale", localeFunc);
 // use it
 
 ipcRenderer.on("asynchronous-reply", (event, arg) => {
-  console.log("aa=>", arg);
+  console.log("aa=>>>>>>>>>>>>>", arg);
   var clipboard = document.getElementById("clipboard");
-
+  
   // debugger;
-  if (arg === "empty") {
+  if (!arg) {
     // var clipboard = document.getElementById("clipboard");
     // console.log("clipboard empty")
     // clipboard.innerHTML = `
@@ -52,11 +52,12 @@ ipcRenderer.on("asynchronous-reply", (event, arg) => {
     // var li = document.createElement("div");
     // li.innerText = "clipboard empty";
     // clipboard.appendChild(li);
-    // console.log("rendering for first time..");
+    console.log("rendering for first time..");
   } else {
     console.log("rendering for first time..");
     arg.forEach((item, i) => {
       var historyWrapper = document.createElement("div");
+      // var historyWrapper = document.createElement("div");
       var historyDiv = document.createElement("div");
       var timeDiv = document.createElement("div");
       timeDiv.classList.add("time");
